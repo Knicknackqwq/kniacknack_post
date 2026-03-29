@@ -1,5 +1,6 @@
 import os
 import json
+import logging
 from openai import OpenAI
 import feedparser
 from bs4 import BeautifulSoup
@@ -12,6 +13,7 @@ class ChangelogNightlyParser:
     def __init__(self):
         load_dotenv()
         self.rss_url = os.getenv("RSS_CHANGELOG_NIGHT")
+        self.logger = logging.getLogger(__name__)
 
     def _unify_date(self, date_str):
         if not date_str: return "1970-01-01T00:00:00Z"
@@ -74,10 +76,6 @@ class ChangelogNightlyParser:
         return repo_blocks
 
     def parse(self, last_date_str: str):
-        if not self.rss_url:
-            print("错误：未在 .env 中找到 RSS_CHANGELOG_NIGHT 配置")
-            return "", last_date_str
-
         last_date_unified = self._unify_date(last_date_str)
         feed = feedparser.parse(self.rss_url)
         
@@ -124,7 +122,7 @@ class ChangelogNightLlm:
             with open(file_path, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except Exception as e:
-            print(f"警告：无法读取 {file_path}，将使用默认配置。错误: {e}")
+            self.logger.exception(f"无法读取系统 Prompt 文件 {file_path}")
             return {"role": "system", "content": "You are a professional technical editor."}
 
     def _prepare_minimal_text(self, json_data):
@@ -173,11 +171,10 @@ class ChangelogNightLlm:
 
         except Exception as e:
             # 4. 错误处理与打印
-            print(f"--- DeepSeek API 调用异常 ---")
+            self.logger.exception(f"--- DeepSeek API 调用异常 ---")
             if hasattr(e, 'status_code'):
-                print(f"错误码: {e.status_code}") 
-            print(f"错误详情: {str(e)}")
-            print(f"---------------------------")
+                self.logger.error(f"错误码: {e.status_code}")
+            self.logger.error(f"错误详情: {str(e)}")
             return "" 
 
 
@@ -202,20 +199,20 @@ class ChangelogNightLlm:
 
 
 
-# --- 测试代码 ---
-if __name__ == "__main__":
-    # 模拟输入数据
-    test_json = []
-    with open("data/changelog_night_list.json", "r", encoding="utf-8") as f:
-        test_json = json.load(f)
+# # --- 测试代码 ---
+# if __name__ == "__main__":
+#     # 模拟输入数据
+#     test_json = []
+#     with open("data/changelog_night_list.json", "r", encoding="utf-8") as f:
+#         test_json = json.load(f)
     
-    llm_handler = ChangelogNightLlm()
-    digest = llm_handler.get_narrative_digest(test_json)
+#     llm_handler = ChangelogNightLlm()
+#     digest = llm_handler.get_narrative_digest(test_json)
     
-    if digest:
-        print("生成的简报内容：")
-        print(digest)
-        with open("data/changelog_digest.txt", "w", encoding="utf-8") as f:
-            f.write(digest)
-    else:
-        print("简报生成失败。")
+#     if digest:
+#         print("生成的简报内容：")
+#         print(digest)
+#         with open("data/changelog_digest.txt", "w", encoding="utf-8") as f:
+#             f.write(digest)
+#     else:
+#         print("简报生成失败。")

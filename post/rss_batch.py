@@ -75,29 +75,29 @@ class RSSBatchParser:
 
         return self.new_items, current_latest_str
 
-# --- 测试代码 ---
-if __name__ == "__main__":
-    # 模拟主模块 knicknack_post.py 的调用逻辑
+# # --- 测试代码 ---
+# if __name__ == "__main__":
+#     # 模拟主模块 knicknack_post.py 的调用逻辑
     
-    # 1. 初始化解析器
-    parser_instance = RSSBatchParser()
+#     # 1. 初始化解析器
+#     parser_instance = RSSBatchParser()
     
-    # 2. 从 .env 获取不同的 URL
+#     # 2. 从 .env 获取不同的 URL
 
     
-    # 3. 模拟历史日期
-    test_last_date = "19 Mar 2026 15:05:45 GMT"
+#     # 3. 模拟历史日期
+#     test_last_date = "19 Mar 2026 15:05:45 GMT"
     
-    # 测试解析 Weekly
-    print("--- Testing Weekly ---")
-    items_w, next_date_w = parser_instance.parse("RSS_BATCH_WEEKLY", test_last_date)
-    print(f"Weekly 新条目: {len(items_w)}, 下次日期: {next_date_w}")
-    with open("data/batch_week.json", "w", encoding="utf-8") as f:
-        json.dump(items_w, f, ensure_ascii=False, indent=2)
+#     # 测试解析 Weekly
+#     print("--- Testing Weekly ---")
+#     items_w, next_date_w = parser_instance.parse("RSS_BATCH_WEEKLY", test_last_date)
+#     print(f"Weekly 新条目: {len(items_w)}, 下次日期: {next_date_w}")
+#     with open("data/batch_week.json", "w", encoding="utf-8") as f:
+#         json.dump(items_w, f, ensure_ascii=False, indent=2)
     
-    # 测试解析 Letter
-    print("\n--- Testing Letter ---")
-    items_l, next_date_l = parser_instance.parse("RSS_BATCH_LETTER", test_last_date)
-    print(f"Letter 新条目: {len(items_l)}, 下次日期: {next_date_l}")
-    with open("data/batch_letter.json", "w", encoding="utf-8") as f:
-        json.dump(items_l, f, ensure_ascii=False, indent=2)
+#     # 测试解析 Letter
+#     print("\n--- Testing Letter ---")
+#     items_l, next_date_l = parser_instance.parse("RSS_BATCH_LETTER", test_last_date)
+#     print(f"Letter 新条目: {len(items_l)}, 下次日期: {next_date_l}")
+#     with open("data/batch_letter.json", "w", encoding="utf-8") as f:
+#         json.dump(items_l, f, ensure_ascii=False, indent=2)

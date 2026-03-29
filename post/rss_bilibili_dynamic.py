@@ -67,28 +67,25 @@ class BilibiliDynamicParser:
             else:
                 # 遇到旧内容，跳出
                 break
-        # with open("data/bilibili_dynamic.json", "a", encoding="utf-8") as f:
-        #     import json
-        #     json.dump(self.new_items, f, ensure_ascii=False, indent=2)
-        return current_latest_str
+        return self.new_items, current_latest_str
 
-# --- 测试代码 ---
-if __name__ == "__main__":
-    # 模拟历史记录中的时间
-    test_last_date = "Wed, 04 Feb 2026 04:31:13 GMT" 
-    # 填入你自己的 RSSHub 地址进行测试
-    test_url = "http://127.0.0.1:1200/bilibili/user/dynamic/650533600" 
+# # --- 测试代码 ---
+# if __name__ == "__main__":
+#     # 模拟历史记录中的时间
+#     test_last_date = "Wed, 04 Feb 2026 04:31:13 GMT" 
+#     # 填入你自己的 RSSHub 地址进行测试
+#     test_url = "http://127.0.0.1:1200/bilibili/user/dynamic/650533600" 
     
-    parser_instance = BilibiliDynamicParser()
-    next_date = parser_instance.parse(test_last_date, test_url)
-    print(f"下次运行使用的日期: {next_date}")
-    test_last_date = "Wed, 18 Mar 2026 5:11:38 GMT" 
-    # 填入你自己的 RSSHub 地址进行测试
-    test_url = "http://127.0.0.1:1200/bilibili/user/dynamic/25876945" 
+#     parser_instance = BilibiliDynamicParser()
+#     next_date = parser_instance.parse(test_last_date, test_url)
+#     print(f"下次运行使用的日期: {next_date}")
+#     test_last_date = "Wed, 18 Mar 2026 5:11:38 GMT" 
+#     # 填入你自己的 RSSHub 地址进行测试
+#     test_url = "http://127.0.0.1:1200/bilibili/user/dynamic/25876945" 
     
-    parser_instance = BilibiliDynamicParser()
-    next_date = parser_instance.parse(test_last_date, test_url)
-    print(f"下次运行使用的日期: {next_date}")
+#     parser_instance = BilibiliDynamicParser()
+#     next_date = parser_instance.parse(test_last_date, test_url)
+#     print(f"下次运行使用的日期: {next_date}")
 
     
     

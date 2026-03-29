@@ -1,6 +1,7 @@
 import os
 import re
 import json
+import logging
 import feedparser
 from bs4 import BeautifulSoup
 from dateutil import parser
@@ -82,10 +83,6 @@ class TldrParser:
         :return: (cleaned_text, updated_last_date)
         """
         rss_url= os.getenv("RSS_TLDR")
-        if not rss_url:
-            print("Error: RSS_TLDR URL not provided.")
-            return "", last_date_str
-
         last_date_unified = self._unify_date(last_date_str)
         feed = feedparser.parse(rss_url)
         
@@ -131,6 +128,7 @@ class TldrLlm:
         load_dotenv()
         self.api_key = os.getenv("LLM_API_KEY")
         self.base_url = os.getenv("LLM_URL") 
+        self.logger = logging.getLogger(__name__)
         
         # 2. 初始化 OpenAI 客户端 (DeepSeek 兼容 OpenAI 格式)
         self.client = OpenAI(api_key=self.api_key, base_url=self.base_url)
@@ -145,7 +143,7 @@ class TldrLlm:
                 config = json.load(f)
                 return config
         except Exception as e:
-            print(f"核心错误：无法读取 Prompt 文件 {file_path}。错误详情: {e}")
+            self.logger.exception(f"核心错误：无法读取 Prompt 文件 {file_path}")
             return None
 
     def get_structured_summary(self, raw_tldr_text):
@@ -188,30 +186,29 @@ class TldrLlm:
 
         except Exception as e:
             # 捕获所有错误（API 超时、错误码、解析失败等）
-            print(f"--- LLM 调用出错 ---")
+            self.logger.error(f"--- LLM 调用出错 ---")
             if hasattr(e, 'status_code'):
-                print(f"错误码: {e.status_code}")
-            print(f"错误信息: {str(e)}")
-            print(f"-------------------")
+                self.logger.error(f"错误码: {e.status_code}")
+            self.logger.error(f"错误信息: {str(e)}")
             return []
 
-# --- 测试代码 ---
-if __name__ == "__main__":
-    # 模拟主程序调用
-    parser_instance = TldrParser()
-    llm=TldrLlm()
-    # 模拟历史日期
-    test_last_date = "2026-03-24T13:23:35.565Z"
-    # 从环境变量读取 URL
+# # --- 测试代码 ---
+# if __name__ == "__main__":
+#     # 模拟主程序调用
+#     parser_instance = TldrParser()
+#     llm=TldrLlm()
+#     # 模拟历史日期
+#     test_last_date = "2026-03-24T13:23:35.565Z"
+#     # 从环境变量读取 URL
     
-    result_text, next_date = parser_instance.parse(test_last_date, test_url)
+#     result_text, next_date = parser_instance.parse(test_last_date, test_url)
     
-    print(f"--- Updated Date: {next_date} ---")
-    print("--- Extracted Summaries ---")
-    print(result_text)
-    result = llm.get_structured_summary(result_text)
-    print("LLM 结构化输出:")    
-    print(json.dumps(result, indent=2, ensure_ascii=False))
-    with open("data/tldr_list.json", "w", encoding="utf-8") as f:
-        json.dump(result, f, ensure_ascii=False, indent=2)
+#     print(f"--- Updated Date: {next_date} ---")
+#     print("--- Extracted Summaries ---")
+#     print(result_text)
+#     result = llm.get_structured_summary(result_text)
+#     print("LLM 结构化输出:")    
+#     print(json.dumps(result, indent=2, ensure_ascii=False))
+#     with open("data/tldr_list.json", "w", encoding="utf-8") as f:
+#         json.dump(result, f, ensure_ascii=False, indent=2)
 

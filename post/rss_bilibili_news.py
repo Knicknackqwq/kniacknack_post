@@ -15,10 +15,6 @@ class BilibiliHotSearchParser:
         """
         核心方法：获取热搜数据
         """
-        if not self.rss_url:
-            print("错误：未在 .env 中找到 RSS_BILIBILI_NEWS 配置")
-            return []
-
         # 解析 RSS
         feed = feedparser.parse(self.rss_url)
         
@@ -34,16 +30,16 @@ class BilibiliHotSearchParser:
 
         return hot_items
 
-# --- 测试代码 ---
-if __name__ == "__main__":
-    # 请确保你的 .env 文件中有 RSS_BILIBILI_NEW=http://...
+# # --- 测试代码 ---
+# if __name__ == "__main__":
+#     # 请确保你的 .env 文件中有 RSS_BILIBILI_NEW=http://...
     
-    parser_instance = BilibiliHotSearchParser()
-    hot_results = parser_instance.fetch()
+#     parser_instance = BilibiliHotSearchParser()
+#     hot_results = parser_instance.fetch()
     
-    print(f"--- Bilibili 热搜 (共 {len(hot_results)} 条) ---")
-    if hot_results:
-        import json
-        print(json.dumps(hot_results, indent=4, ensure_ascii=False))
-        with open("data/bilibili_hot.json", "w", encoding="utf-8") as f:
-            json.dump(hot_results, f, ensure_ascii=False, indent=2)
+#     print(f"--- Bilibili 热搜 (共 {len(hot_results)} 条) ---")
+#     if hot_results:
+#         import json
+#         print(json.dumps(hot_results, indent=4, ensure_ascii=False))
+#         with open("data/bilibili_hot.json", "w", encoding="utf-8") as f:
+#             json.dump(hot_results, f, ensure_ascii=False, indent=2)

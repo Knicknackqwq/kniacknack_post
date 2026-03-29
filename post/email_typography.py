@@ -2,12 +2,14 @@ import os
 import json
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
+import logging
 
 class EmailTypography:
     def __init__(self, data_dir="data", template_dir="templates", template_file="email_template.html"):
         self.data_dir = data_dir
         self.env = Environment(loader=FileSystemLoader(template_dir))
         self.template_file = template_file
+        self.logger = logging.getLogger(__name__)
 
     def _safe_load_json_list(self, filename):
         """
@@ -22,7 +24,7 @@ class EmailTypography:
                 data = json.load(f)
                 return data if isinstance(data, list) else []
         except Exception as e:
-            print(f"读取文件 {filename} 出错: {e}")
+            self.logger.exception(f"读取 {filename} 失败")
             return []
 
     def _safe_load_txt(self, filename):
@@ -123,13 +125,13 @@ class EmailTypography:
         template = self.env.get_template(self.template_file)
         return template.render(render_context)
 
-if __name__ == "__main__":
-    # 本地预览测试
-    typo = EmailTypography()
-    final_html = typo.render_daily_email()
+# if __name__ == "__main__":
+#     # 本地预览测试
+#     typo = EmailTypography()
+#     final_html = typo.render_daily_email()
     
-    output_path = os.path.join("data", "daily_report_final.html")
-    with open(output_path, "w", encoding="utf-8") as f:
-        f.write(final_html)
-    print(f"渲染成功，预览文件已生成至: {output_path}")
+#     output_path = os.path.join("data", "daily_report_final.html")
+#     with open(output_path, "w", encoding="utf-8") as f:
+#         f.write(final_html)
+#     print(f"渲染成功，预览文件已生成至: {output_path}")
     

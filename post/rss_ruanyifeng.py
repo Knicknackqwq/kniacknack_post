@@ -74,24 +74,24 @@ class RSSRuanyifengParser:
 
         return self.new_items, current_latest_str
 
-# --- 测试代码 ---
-if __name__ == "__main__":
-    # 模拟主模块逻辑
-    parser_instance = RSSRuanyifengParser()
+# # --- 测试代码 ---
+# if __name__ == "__main__":
+#     # 模拟主模块逻辑
+#     parser_instance = RSSRuanyifengParser()
     
    
-    # 模拟历史日期
-    test_last_date = "Fri, 20 Mar 2026 07:59:16 +0800"
+#     # 模拟历史日期
+#     test_last_date = "Fri, 20 Mar 2026 07:59:16 +0800"
     
-    items, next_date = parser_instance.parse(test_last_date)
+#     items, next_date = parser_instance.parse(test_last_date)
     
-    print(f"抓取到新日志数量: {len(items)}")
-    print(f"下次运行使用的日期: {next_date}")
+#     print(f"抓取到新日志数量: {len(items)}")
+#     print(f"下次运行使用的日期: {next_date}")
     
-    if items:
-        import json
-        with open("data/ruanyifeng.json", "w", encoding="utf-8") as f:
-            json.dump(items, f, ensure_ascii=False, indent=2)
-        for item in items:
-            print(json.dumps(item, indent=4, ensure_ascii=False))
+#     if items:
+#         import json
+#         with open("data/ruanyifeng.json", "w", encoding="utf-8") as f:
+#             json.dump(items, f, ensure_ascii=False, indent=2)
+#         for item in items:
+#             print(json.dumps(item, indent=4, ensure_ascii=False))
        
