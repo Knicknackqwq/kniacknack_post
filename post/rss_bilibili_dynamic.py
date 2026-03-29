@@ -27,7 +27,8 @@ class BilibiliDynamicParser:
         
         # 1. 提取 description：entry.summary 中的全部纯文本（去掉所有 HTML 标签）
         description = soup.get_text().strip()
-
+        if "视频地址：" in description:
+            description = description.split("视频地址：")[0].strip()
         # 2. 提取 image_url (选取第一个 img 标签)
         img_tag = soup.find('img')
         image_url = ""
@@ -69,23 +70,18 @@ class BilibiliDynamicParser:
                 break
         return self.new_items, current_latest_str
 
-# # --- 测试代码 ---
-# if __name__ == "__main__":
-#     # 模拟历史记录中的时间
-#     test_last_date = "Wed, 04 Feb 2026 04:31:13 GMT" 
-#     # 填入你自己的 RSSHub 地址进行测试
-#     test_url = "http://127.0.0.1:1200/bilibili/user/dynamic/650533600" 
+# --- 测试代码 ---
+if __name__ == "__main__":
+    # 模拟历史记录中的时间
+    test_last_date = "Wed, 04 Feb 2026 04:31:13 GMT" 
+    # 填入你自己的 RSSHub 地址进行测试
+    test_url = "http://127.0.0.1:1200/bilibili/user/dynamic/650533600" 
     
-#     parser_instance = BilibiliDynamicParser()
-#     next_date = parser_instance.parse(test_last_date, test_url)
-#     print(f"下次运行使用的日期: {next_date}")
-#     test_last_date = "Wed, 18 Mar 2026 5:11:38 GMT" 
-#     # 填入你自己的 RSSHub 地址进行测试
-#     test_url = "http://127.0.0.1:1200/bilibili/user/dynamic/25876945" 
-    
-#     parser_instance = BilibiliDynamicParser()
-#     next_date = parser_instance.parse(test_last_date, test_url)
-#     print(f"下次运行使用的日期: {next_date}")
+    parser_instance = BilibiliDynamicParser()
+    new_items,next_date = parser_instance.parse(test_last_date, test_url)
+    print(f"下次运行使用的日期: {next_date}")
+    import json
+    print(json.dumps(new_items, ensure_ascii=False, indent=2))
 
     
     
