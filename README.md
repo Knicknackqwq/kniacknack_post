@@ -1,7 +1,7 @@
 # Knicknack POST
 
 这是 `post/` 目录下的一个 RSS 聚合、邮件排版与发送项目。它从多源 RSS 读取内容，处理并生成一封 HTML 格式的每日技术简报邮件。
-相关技术方案见个人Blog[Knicknack_post分类](https://knicknackqwq.github.io/categories/Knicknack-POST/分类)
+相关技术方案见个人Blog[Knicknack_post分类](https://knicknackqwq.github.io/categories/Knicknack-POST/)
 
 ## 主要功能
 
