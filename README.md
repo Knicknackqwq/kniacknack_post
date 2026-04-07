@@ -44,7 +44,7 @@
 
 ## 配置
 
-项目通过 `.env` 文件加载配置。常见配置项包括：
+项目通过 `.env` 文件加载配置。所有配置项包括：
 
 ```env
 RSS_BILIBILI_DYNAMIC=
@@ -83,9 +83,13 @@ EMAIL_TO=
 
 ## 运行方式
 
+
+
+拉取该项目后，在post/目录下.env文件中填入上述配置
 在 `post/` 目录下运行：
 
 ```bash
+pip install -r requirements.txt
 python knicknack_post.py
 ```
 
