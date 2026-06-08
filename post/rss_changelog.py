@@ -154,7 +154,7 @@ class ChangelogNightLlm:
         try:
             # 2. 调用 DeepSeek API
             response = self.client.chat.completions.create(
-                model="deepseek-chat",
+                model="deepseek-v4-flash",
                 messages=[
                     self.system_prompt,
                     {"role": "user", "content": f"请基于以下仓库列表生成简报：\n{input_text}"}

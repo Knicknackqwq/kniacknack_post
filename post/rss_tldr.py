@@ -159,7 +159,7 @@ class TldrLlm:
         try:
             # 调用 DeepSeek API
             response = self.client.chat.completions.create(
-                model="deepseek-chat",  
+                model="deepseek-v4-flash",  
                 messages=[
                     self.system_prompt,
                     {"role": "user", "content": raw_tldr_text}
