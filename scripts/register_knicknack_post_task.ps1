@@ -21,7 +21,6 @@ $argument = "-NoProfile -ExecutionPolicy Bypass -File `"$escapedRunner`" -Projec
 
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument $argument -WorkingDirectory $ProjectRoot
 $triggerMorning = New-ScheduledTaskTrigger -Daily -At 7:30AM
-$triggerEvening = New-ScheduledTaskTrigger -Daily -At 5:30PM
 $settings = New-ScheduledTaskSettingsSet `
     -StartWhenAvailable `
     -AllowStartIfOnBatteries `
@@ -31,7 +30,7 @@ $settings = New-ScheduledTaskSettingsSet `
 Register-ScheduledTask `
     -TaskName $TaskName `
     -Action $action `
-    -Trigger @($triggerMorning, $triggerEvening) `
+    -Trigger $triggerMorning `
     -Settings $settings `
-    -Description "Run knicknack_post at 07:30 and 17:30, starting and stopping a WSL Docker container around execution." `
+    -Description "Run knicknack_post daily at 07:30, starting and stopping a WSL Docker container around execution." `
     -Force
