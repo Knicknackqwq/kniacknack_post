@@ -53,6 +53,9 @@ class KnicknackPost:
             else:
                 f.write(str(content))
 
+    def _log_rss_update_time(self, source_name, update_time):
+        self.logger.info(f"RSS update time | source={source_name} | update_time={update_time}")
+
     def _setup_logger(self):
         logger = logging.getLogger()   # root logger
         logger.setLevel(logging.INFO)
@@ -104,7 +107,7 @@ class KnicknackPost:
             dyn_item, new_date = bilibili_dynamic.parse(last_date, url_uid)
             dyn_items += dyn_item
             self.last_time[uid] = new_date
-            self.logger.info(f"{url_uid} - {new_date}")
+            self._log_rss_update_time(f"bilibili_dynamic:{uid}", new_date)
         self._write_data("bilibili_dynamic.json", dyn_items)
         
 
@@ -115,6 +118,7 @@ class KnicknackPost:
         week_items, new_date = batch_parser.parse("RSS_BATCH_WEEKLY", last_date)
         self._write_data("batch_week.json", week_items)
         self.last_time["batch_week"] = new_date
+        self._log_rss_update_time("batch_week", new_date)
 
         # 4. The Batch Letter
         self.logger.info("获取 The Batch Letter...")
@@ -122,6 +126,7 @@ class KnicknackPost:
         letter_items, new_date = batch_parser.parse("RSS_BATCH_LETTER", last_date)
         self._write_data("batch_letter.json", letter_items)
         self.last_time["batch_letter"] = new_date
+        self._log_rss_update_time("batch_letter", new_date)
 
         # 5. TLDR 每日简报 (含 LLM 处理)
         self.logger.info("获取并处理 TLDR 简报...")
@@ -134,6 +139,7 @@ class KnicknackPost:
             tldr_json = tlde_llm_summary.get_structured_summary(raw_tldr_text)
             self._write_data("tldr_list.json", tldr_json)
         self.last_time["tldr"] = new_date
+        self._log_rss_update_time("tldr", new_date)
 
         # 6. 阮一峰周刊
         self.logger.info("获取阮一峰周刊...")
@@ -142,6 +148,7 @@ class KnicknackPost:
         ruanyi_items, new_date = ruanyifeng_parser.parse(last_date)
         self._write_data("ruanyifeng.json", ruanyi_items)
         self.last_time["ruanyifeng"] = new_date
+        self._log_rss_update_time("ruanyifeng", new_date)
 
         # 7. Changelog Nightly (含 LLM 处理)
         self.logger.info("获取并处理 Changelog GitHub 趋势...")
@@ -154,6 +161,7 @@ class KnicknackPost:
         digest = changelog_llm.get_narrative_digest(repo_list)
         self._write_data("changelog_digest.txt", digest)
         self.last_time["changelog"] = new_date
+        self._log_rss_update_time("changelog", new_date)
 
         # 8. 南方周末
         self.logger.info("获取南方周末动态...")
